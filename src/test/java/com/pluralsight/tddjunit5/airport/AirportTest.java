@@ -1,6 +1,8 @@
 package com.pluralsight.tddjunit5.airport;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,66 +10,104 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Airport Class Test Suite")
 class AirportTest {
 
-    @Test
-    public void testEconomyFlight_EconomyPassenger() {
-        Flight economyFlight = new EconomyFlight("1");
+    @Nested
+    @DisplayName("Given an economy flight")
+    class EconomyFlightTest {
+        private Flight economyFlight;
+        private Passenger economySample;
+        private Passenger vipSample;
 
-        Passenger economySample = new Passenger("John", false);
+        @BeforeEach
+        void setup() {
+            economyFlight = new EconomyFlight("1");
+            economySample = new Passenger("John", false);
+            vipSample = new Passenger("John", true);
+        }
 
-        assertAll(
-                () -> assertEquals("1", economyFlight.getId()),
-                () -> assertTrue(economyFlight.addPassenger(economySample)),
-                () -> assertEquals(1, economyFlight.getPassengersList().size()),
-                () -> assertEquals("John", economyFlight.getPassengersList().get(0).getName()),
-                () -> assertTrue(economyFlight.removePassenger(economySample)),
-                () -> assertEquals(0, economyFlight.getPassengersList().size())
-        );
+        @Nested
+        @DisplayName("When an economy passenger books")
+        class EconomyPassenger {
+
+            @Test
+            @DisplayName("Then economy passenger can be added and removed from an economy flight")
+            public void testEconomyFlight_EconomyPassenger() {
+                assertAll(
+                        () -> assertEquals("1", economyFlight.getId()),
+                        () -> assertTrue(economyFlight.addPassenger(economySample)),
+                        () -> assertEquals(1, economyFlight.getPassengersList().size()),
+                        () -> assertEquals("John", economyFlight.getPassengersList().get(0).getName()),
+                        () -> assertTrue(economyFlight.removePassenger(economySample)),
+                        () -> assertEquals(0, economyFlight.getPassengersList().size())
+                );
+            }
+        }
+
+        @Nested
+        @DisplayName("When a business passenger books")
+        class BusinessPassenger {
+
+            @Test
+            @DisplayName("Then business passenger can be added but not removed from an economy flight")
+            public void testEconomyFlight_BusinessPassenger() {
+                assertAll(
+                        () -> assertEquals("1", economyFlight.getId()),
+                        () -> assertTrue(economyFlight.addPassenger(vipSample)),
+                        () -> assertEquals(1, economyFlight.getPassengersList().size()),
+                        () -> assertEquals("John", economyFlight.getPassengersList().get(0).getName()),
+                        () -> assertFalse(economyFlight.removePassenger(vipSample)),
+                        () -> assertEquals(1, economyFlight.getPassengersList().size())
+                );
+            }
+        }
     }
 
-    @Test
-    public void testEconomyFlight_BusinessPassenger() {
-        Flight economyFlight = new EconomyFlight("1");
+    @Nested
+    @DisplayName("Given a business Flight")
+    class BusinessFlightTest {
+        private Flight businessFlight;
+        private Passenger economySample;
+        private Passenger vipSample;
 
-        Passenger vipSample = new Passenger("John", true);
+        @BeforeEach
+        void setup() {
+            businessFlight = new BusinessFlight("2");
+            economySample = new Passenger("John", false);
+            vipSample = new Passenger("John", true);
+        }
 
-        assertAll(
-                () -> assertEquals("1", economyFlight.getId()),
-                () -> assertTrue(economyFlight.addPassenger(vipSample)),
-                () -> assertEquals(1, economyFlight.getPassengersList().size()),
-                () -> assertEquals("John", economyFlight.getPassengersList().get(0).getName()),
-                () -> assertFalse(economyFlight.removePassenger(vipSample)),
-                () -> assertEquals(1, economyFlight.getPassengersList().size())
-        );
-    }
+        @Nested
+        @DisplayName("When an economy passenger books a flight")
+        class EconomyPassenger {
 
-    @Test
-    public void testBusinessFlight_EconomyPassenger() {
-        Flight businessFlight = new BusinessFlight("2");
+            @Test
+            @DisplayName("Then an economy passenger cannot be added or removed from the business flight")
+            public void testBusinessFlight_EconomyPassenger() {
+                assertAll(
+                        () -> assertEquals("2", businessFlight.getId()),
+                        () -> assertFalse(businessFlight.addPassenger(economySample)),
+                        () -> assertEquals(0, businessFlight.getPassengersList().size()),
+                        () -> assertFalse(businessFlight.removePassenger(economySample)),
+                        () -> assertEquals(0, businessFlight.getPassengersList().size())
+                );
+            }
+        }
 
-        Passenger economySample = new Passenger("John", false);
+        @Nested
+        @DisplayName("When a business passenger books a flight")
+        class BusinessPassenger{
 
-        assertAll(
-                () -> assertEquals("2", businessFlight.getId()),
-                () -> assertFalse(businessFlight.addPassenger(economySample)),
-                () -> assertEquals(0, businessFlight.getPassengersList().size()),
-                () -> assertFalse(businessFlight.removePassenger(economySample)),
-                () -> assertEquals(0, businessFlight.getPassengersList().size())
-        );
-    }
-
-    @Test
-    public void testBusinessFlight_VIPPassenger() {
-        Flight businessFlight = new BusinessFlight("2");
-
-        Passenger vipSample = new Passenger("John", true);
-
-        assertAll(
-                () -> assertEquals("2", businessFlight.getId()),
-                () -> assertTrue(businessFlight.addPassenger(vipSample)),
-                () -> assertEquals(1, businessFlight.getPassengersList().size()),
-                () -> assertEquals("John", businessFlight.getPassengersList().get(0).getName()),
-                () -> assertFalse(businessFlight.removePassenger(vipSample)),
-                () -> assertEquals(1, businessFlight.getPassengersList().size())
-        );
+            @Test
+            @DisplayName("Then the business passenger can be added but not removed from the business flight")
+            public void testBusinessFlight_BusinessPassenger() {
+                assertAll(
+                        () -> assertEquals("2", businessFlight.getId()),
+                        () -> assertTrue(businessFlight.addPassenger(vipSample)),
+                        () -> assertEquals(1, businessFlight.getPassengersList().size()),
+                        () -> assertEquals("John", businessFlight.getPassengersList().get(0).getName()),
+                        () -> assertFalse(businessFlight.removePassenger(vipSample)),
+                        () -> assertEquals(1, businessFlight.getPassengersList().size())
+                );
+            }
+        }
     }
 }
