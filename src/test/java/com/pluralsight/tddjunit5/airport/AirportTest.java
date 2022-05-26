@@ -1,9 +1,6 @@
 package com.pluralsight.tddjunit5.airport;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,9 +32,24 @@ class AirportTest {
                         () -> assertEquals("1", economyFlight.getId()),
                         () -> assertTrue(economyFlight.addPassenger(economySample)),
                         () -> assertEquals(1, economyFlight.getPassengersList().size()),
-                        () -> assertEquals("John", economyFlight.getPassengersList().get(0).getName()),
+                        () -> assertTrue(economyFlight.getPassengersList().contains(economySample)),
                         () -> assertTrue(economyFlight.removePassenger(economySample)),
                         () -> assertEquals(0, economyFlight.getPassengersList().size())
+                );
+            }
+
+            @RepeatedTest(5)
+            @DisplayName("Then economy passenger can be added and removed from an economy flight")
+            public void testEconomyFlight_EconomyPassengerCanOnlyBeAddedOnce(RepetitionInfo repetitionInfo) {
+
+                for (int i=0; i < repetitionInfo.getCurrentRepetition(); i++){
+                    economyFlight.addPassenger(economySample);
+                }
+
+                assertAll( "Verify a usual passenger can be added to an economy flight only once",
+                        () -> assertEquals(1, economyFlight.getPassengersList().size()),
+                        () -> assertTrue(economyFlight.getPassengersList().contains(economySample)),
+                        () -> assertTrue(economyFlight.getPassengersList().contains(economySample))
                 );
             }
         }
@@ -53,7 +65,7 @@ class AirportTest {
                         () -> assertEquals("1", economyFlight.getId()),
                         () -> assertTrue(economyFlight.addPassenger(vipSample)),
                         () -> assertEquals(1, economyFlight.getPassengersList().size()),
-                        () -> assertEquals("John", economyFlight.getPassengersList().get(0).getName()),
+                        () -> assertTrue(economyFlight.getPassengersList().contains(vipSample)),
                         () -> assertFalse(economyFlight.removePassenger(vipSample)),
                         () -> assertEquals(1, economyFlight.getPassengersList().size())
                 );
@@ -103,7 +115,7 @@ class AirportTest {
                         () -> assertEquals("2", businessFlight.getId()),
                         () -> assertTrue(businessFlight.addPassenger(vipSample)),
                         () -> assertEquals(1, businessFlight.getPassengersList().size()),
-                        () -> assertEquals("John", businessFlight.getPassengersList().get(0).getName()),
+                        () -> assertTrue(businessFlight.getPassengersList().contains(vipSample)),
                         () -> assertFalse(businessFlight.removePassenger(vipSample)),
                         () -> assertEquals(1, businessFlight.getPassengersList().size())
                 );
@@ -153,7 +165,7 @@ class AirportTest {
                         () -> assertEquals("2", premiumFlight.getId()),
                         () -> assertTrue(premiumFlight.addPassenger(vipSample)),
                         () -> assertEquals(1, premiumFlight.getPassengersList().size()),
-                        () -> assertEquals("John", premiumFlight.getPassengersList().get(0).getName()),
+                        () -> assertTrue(premiumFlight.getPassengersList().contains(vipSample)),
                         () -> assertTrue(premiumFlight.removePassenger(vipSample)),
                         () -> assertEquals(0, premiumFlight.getPassengersList().size())
                 );

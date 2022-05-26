@@ -1,3 +1,7 @@
 /home/luizsantos/workspace/airport/src/main/java/com/pluralsight/tddjunit5/airport/Flight.java
+/home/luizsantos/workspace/airport/src/main/java/com/pluralsight/tddjunit5/airport/BusinessFlight.java
 /home/luizsantos/workspace/airport/src/main/java/com/pluralsight/tddjunit5/airport/Passenger.java
-/home/luizsantos/workspace/airport/src/main/java/com/pluralsight/tddjunit5/airport/Airport.java
+/home/luizsantos/workspace/airport/src/main/java/com/pluralsight/tddjunit5/airport/EconomyFlight.java
+/home/luizsantos/workspace/airport/src/main/java/com/pluralsight/tddjunit5/milage/FlightArgumentConverter.java
+/home/luizsantos/workspace/airport/src/main/java/com/pluralsight/tddjunit5/airport/PremiumFlight.java
+/home/luizsantos/workspace/airport/src/main/java/com/pluralsight/tddjunit5/milage/Milage.java
